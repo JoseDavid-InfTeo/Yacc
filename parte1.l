@@ -1,32 +1,35 @@
 %{
-    #include "y.tab.h"
-    #include "parte1.h"
-    #include <stdlib.h>
-	#include <stdio.h>
-	#include <string.h>
-	
+  #include "y.tab.h"
+  #include "calc3.h"
+  #include <string.h>
+  
 
 %}
-	letra [a-zA-Z]
-	natural [0-9]
-	nodigitos [_a-zA-Z]
-	separadores [,;(){}]
-	input [^\r\n]
-	operador [+*=&"&&"]
-	blanco (" ")+
-	tabulacion \t
-	eol (\n|\r|\r\n)
-	numero ({natural}+("."{natural}+)?)
-	ident {letra}({nodigitos}|{natural})*
-	variables ((("int"|"float"){blanco}+{ident})(","{blanco}*{ident})*";")
-	coment ("//"{input}*{eol}?)
-	cadena \"(\\.|[^\\"])*\"
-	llaves [(){}]
-%%
+entero	[0-9]+
+real	{entero}+[.]{entero}([eE][-+]?{entero})?
+cadena \"(\\.|[^\\"])*\"
+iden	[a-z][a-z0-9]*
+cte_iden [A-Z]+
+define  #define
 
 %%
-	int yywrap()
-	{
-		return 1;
-	}
+{define} 	 	{return DEFINE;}
+
+{cte_iden}   	{yylval.indice = buscar_simbolo(yytext);
+				 return ID;}
+{entero}|{real} {yylval.valor = atof(yytext);
+	 	 		 return NUM;
+				}
+
+{cadena}		{yylval.valor = yytext;
+				 return CADENA;}
+
+[ \t]	;
+
+.|\n	;
+
+%%
+int yywrap(){
+return 1;
+}
 
