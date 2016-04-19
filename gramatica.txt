@@ -1,0 +1,25 @@
+PROGRAMA : DECL_CTES DECL_VBLS MAIN
+DECL_CTES : '' | DECL_CTE DECL_CTES
+DECL_CTE : #define id VALOR_CTE
+VALOR_CTE : CteInt | CteFloat | CteChar
+DECL_VBLS : '' | DECL_VBL DECL_VBLS
+DECL_VBL : TIPO LISTID
+TIPO : int | float | char
+LIST_ID: ID | ID, LIST_ID
+ID : id | id = VALOR_CTE
+MAIN : CABEZ CUERPO
+CABEZ : int main()
+CUERPO : DECL_VBLS INSTRUCCS
+INSTRUCCS : INSTRUCC | INSTRUCC INSTRUCCS
+INSTRUCC : ASIG | VISU | LECT | COND | REPE
+ASIG : id = EXPR
+EXPR : VAL | VAL OP_ARIT EXPR
+VAL : id | VALOR_CTE
+OP_ARIT : '+' | '-' | '*' | '/'
+VISU : printf '(' LIST_EXP ')' ';'
+LIST_EXPR : '' | EXPR | EXPR, LIST_EXPR
+LECT : scanf '(' CDC , DIRECC ')' ';'
+CDC : %d | %c | %f
+DIRECC : '&' id
+COND : ''
+REPE : ''
