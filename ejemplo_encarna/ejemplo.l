@@ -3,7 +3,8 @@
 #include "y.tab.h"
 #include <string.h>
   
-  int nLineas=0;
+int nLineas=0;
+
 %}
 
 entero	[0-9]+
@@ -31,10 +32,6 @@ cadena \"(\\.|[^\\"])*\"
             return DEFINE;
           }
 
-{iden}    { printf("\n ID");
-            return ID;
-          }
-
 "int"     { printf("\n INT");
             return INT;
           }
@@ -47,12 +44,19 @@ cadena \"(\\.|[^\\"])*\"
             return CHAR;
           }
 
-\n  { nLineas++;
-    
-    }
+"main()"  {
+
+          }
+
+{iden}    { printf("\n ID");
+            return ID;
+          }
+
+\n  { nLineas++; }
 
 .	{ printf("\n %c",yytext[0]);
-     return yytext[0];}
+    return yytext[0];
+  }
 
 %%
 
