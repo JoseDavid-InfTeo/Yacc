@@ -11,6 +11,7 @@ entero	[0-9]+
 real	{entero}+[.]{entero}([eE][-+]?{entero})?
 iden	[a-zA-Z][a-zA-Z0-9]*
 cadena \"(\\.|[^\\"])*\"
+operador [+-*/&|!<>%"&&""||""++""--""<="">=""==""!="]
 
 %%
 
@@ -51,6 +52,10 @@ cadena \"(\\.|[^\\"])*\"
 {iden}    { printf("\n ID");
             return ID;
           }
+
+{operador}  { printf("\n OPERADOR")
+              return OPERADOR;
+            }
 
 \n  { nLineas++; }
 
