@@ -11,6 +11,7 @@ entero	[0-9]+
 real	{entero}+[.]{entero}([eE][-+]?{entero})?
 iden	[a-zA-Z][a-zA-Z0-9]*
 cadena \"(\\.|[^\\"])*\"
+main  ("main"" "*"("" "*")")
 
 %%
 
@@ -44,8 +45,8 @@ cadena \"(\\.|[^\\"])*\"
             return CHAR;
           }
 
-"main()"  {
-
+{main}    { printf("\n MAIN");
+            return MAIN;
           }
 
 {iden}    { printf("\n ID");
