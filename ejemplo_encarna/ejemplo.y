@@ -22,36 +22,72 @@ extern int nLineas;
 %token  INT
 %token  FLOAT
 %token  CHAR
-
-
+%token  MAIN
+%token  OPERADOR
+%token  PRINTF
+%token  IF
+%token  FOR
+%token  ELSE
+%token  SCANF
+%token  WHILE
+%token  CDC
 
 %%
-programa:	declaracionesCtes declaracionVbles {printf("\n Todo correcto numero de lineas %d\n",nLineas);}
+programa:	declaracionesCtes declaracionVbles main {printf("\n Todo correcto numero de lineas %d\n",nLineas);}
             ;
 declaracionesCtes: /*vacia*/
                    | declaracionCte declaracionesCtes
                    ;
-declaracionCte:    '#' DEFINE ID NUM_ENTERO {printf("\nDeclaracion cte entera");}
-                   | '#' DEFINE ID NUM_REAL {printf("\nDeclaracion cte real");}
-                   | '#' DEFINE ID CADENA {printf("\nDeclaracion cte cadena");}
+declaracionCte:    '#' DEFINE ID valor_cte {printf("\nDeclaracion cte");}
+                   ;
+valor_cte:         NUM_ENTERO
+                   | NUM_REAL
+                   | CADENA
                    ;
 declaracionVbles:  /*vacia*/
-                   | declaracionVble declaracionesVbles
+                   | declaracionVble declaracionVbles
                    ;
-declaracionVble:   tipo listID {printf("\nDeclaracion vble");}
+declaracionVble:   tipo listID ';' {printf("\nDeclaracion vble");}
                    ;
-tipo:              INT {printf("\n-INT-");}
-                   | FLOAT {printf("\n-FLOAT-");}
-                   | CHAR {printf("\n-CHAR-");}
+tipo:              INT
+                   | FLOAT
+                   | CHAR
                    ;
 listID:            id
                    | id ',' listID
                    ;
 id:                ID
-                   | ID '=' NUM_ENTERO
-                   | ID '=' NUM_REAL
-                   | ID '=' CADENA
+                   | asig
                    ;
+main:              MAIN '{' cuerpo '}'
+                   ;
+cuerpo:            declaracionVbles instrucciones
+                   ;
+instrucciones:     instruccion
+                   | instruccion instrucciones
+                   ;
+instruccion:       asig ';' {printf("\nAsignacion");}
+                   | visu ';' {printf("\nVisualizacion");}
+                   | lect ';' {printf("\nLectura");}
+                   ;
+asig:              ID '=' expr
+                   ;
+expr:              val
+                   | val OPERADOR expr
+                   ;
+val:               ID
+                   | valor_cte
+                   ;
+visu:              PRINTF '(' listExpr ')'
+                   ;
+listExpr:          /*vacia*/
+                   | expr
+                   | expr ',' listExpr
+                   ;
+lect:              SCANF '(' CDC  ',' OPERADOR ID ')'
+                   ;
+
+
 
 %%
 
