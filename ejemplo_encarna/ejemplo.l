@@ -1,10 +1,8 @@
 %{
-
 #include "y.tab.h"
 #include <string.h>
   
 int nLineas=0;
-
 %}
 
 entero	[0-9]+
@@ -52,6 +50,10 @@ operador [+\-*/&|!<>%]
 "printf"  { printf("\n PRINTF");
             return PRINTF;
           }
+
+"scanf" { printf("\n SCANF");
+          return SCANF;
+        }
 
 "if"  { printf("\n IF");
         return IF;
