@@ -14,24 +14,44 @@ FILE *yyin;
 extern int nLineas;
 
 %}
-
-
 %token 	ID
 %token  DEFINE
-%token 	NUM
-
+%token 	NUM_ENTERO
+%token  NUM_REAL
+%token  CADENA
+%token  INT
+%token  FLOAT
+%token  CHAR
 
 
 
 %%
-programa:	declaracionesCtes {printf("\n Todo correcto numero de lineas %d",nLineas);}
-   ;
+programa:	declaracionesCtes declaracionVbles {printf("\n Todo correcto numero de lineas %d\n",nLineas);}
+            ;
 declaracionesCtes: /*vacia*/
-                  | declaracionCte declaracionesCtes
-                  ;
-declaracionCte: '#' DEFINE ID NUM {printf("\nDeclaracion cte");}
-                ;
-
+                   | declaracionCte declaracionesCtes
+                   ;
+declaracionCte:    '#' DEFINE ID NUM_ENTERO {printf("\nDeclaracion cte entera");}
+                   | '#' DEFINE ID NUM_REAL {printf("\nDeclaracion cte real");}
+                   | '#' DEFINE ID CADENA {printf("\nDeclaracion cte cadena");}
+                   ;
+declaracionVbles:  /*vacia*/
+                   | declaracionVble declaracionesVbles
+                   ;
+declaracionVble:   tipo listID {printf("\nDeclaracion vble");}
+                   ;
+tipo:              INT {printf("\n-INT-");}
+                   | FLOAT {printf("\n-FLOAT-");}
+                   | CHAR {printf("\n-CHAR-");}
+                   ;
+listID:            id
+                   | id ',' listID
+                   ;
+id:                ID
+                   | ID '=' NUM_ENTERO
+                   | ID '=' NUM_REAL
+                   | ID '=' CADENA
+                   ;
 
 %%
 
