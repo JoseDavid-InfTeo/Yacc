@@ -49,6 +49,26 @@ operador [+\-*/&|!<>%]
                   return MAIN;
                 }
 
+"printf"  { printf("\n PRINTF");
+            return PRINTF;
+          }
+
+"if"  { printf("\n IF");
+        return IF;
+      }
+
+"else"  { printf("\n ELSE");
+          return ELSE;
+        }
+
+"while" { printf("\n WHILE");
+          return WHILE;
+        }
+
+"for" { printf("\n FOR");
+        return FOR;
+      }
+
 {iden}    { printf("\n ID");
             return ID;
           }
