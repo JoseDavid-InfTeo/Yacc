@@ -21,6 +21,10 @@ operador [+\-*/&|!<>%]
           return NUM_REAL;
         }
 
+"%d"|"%f"|"%c"  { printf("\n CDC");
+                  return CDC;
+                }     
+
 {cadena}  { printf("\n CADENA");
             return CADENA;
           }
