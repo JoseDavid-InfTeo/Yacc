@@ -1,32 +1,45 @@
 %{
 
-  #include "y.tab.h"
-
-  #include <string.h>
+#include "y.tab.h"
+#include <string.h>
   
   int nLineas=0;
 %}
+
 entero	[0-9]+
 real	{entero}+[.]{entero}([eE][-+]?{entero})?
 iden	[a-zA-Z][a-zA-Z0-9]*
+cadena \"(\\.|[^\\"])*\"
+
 %%
-{entero}|{real}	{ printf("\n NUM");
-	 	 return NUM;
-		}
+
+{entero}  { printf("\n NUM_ENTERO");
+            return NUM_ENTERO;
+		      }
+
+{real}  { printf("\n NUM_REAL");
+          return NUM_REAL;
+        }
+
+{cadena}  { printf()
+
+          }
+
 [ \t]	;
+
 "define"  { printf("\n DEFINE");
-    return DEFINE;}
+            return DEFINE;
+          }
 
-{iden}	{ printf("\n ID");
-	 
+{iden}    { printf("\n ID");
+            return ID;
+          }
 
-	 return ID;
-	}
 \n  { nLineas++;
     
     }
 
-.	{printf("\n %c",yytext[0]);
+.	{ printf("\n %c",yytext[0]);
      return yytext[0];}
 
 %%
