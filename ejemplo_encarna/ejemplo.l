@@ -35,6 +35,18 @@ cadena \"(\\.|[^\\"])*\"
             return ID;
           }
 
+"int"     { printf("\n INT");
+            return INT;
+          }
+
+"float"   { printf("\n FLOAT");
+            return FLOAT;
+          }
+
+"char"    { printf("\n CHAR");
+            return CHAR;
+          }
+
 \n  { nLineas++;
     
     }
