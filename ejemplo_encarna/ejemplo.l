@@ -21,8 +21,8 @@ cadena \"(\\.|[^\\"])*\"
           return NUM_REAL;
         }
 
-{cadena}  { printf()
-
+{cadena}  { printf("\n CADENA");
+            return CADENA;
           }
 
 [ \t]	;
