@@ -14,9 +14,9 @@ FILE *yyin;
 extern int nLineas;
 
 %}
-%token 	ID
+%token  ID
 %token  DEFINE
-%token 	NUM_ENTERO
+%token  NUM_ENTERO
 %token  NUM_REAL
 %token  CADENA
 %token  INT
@@ -24,6 +24,7 @@ extern int nLineas;
 %token  CHAR
 %token  MAIN
 %token  OPERADOR
+%token  OPERADOR2
 %token  PRINTF
 %token  IF
 %token  FOR
@@ -31,6 +32,7 @@ extern int nLineas;
 %token  SCANF
 %token  WHILE
 %token  CDC
+
 
 %%
 programa:	declaracionesCtes declaracionVbles main {printf("\n Todo correcto numero de lineas %d\n",nLineas);}
@@ -69,8 +71,11 @@ instrucciones:     instruccion
 instruccion:       asig ';' {printf("\nAsignacion");}
                    | visu ';' {printf("\nVisualizacion");}
                    | lect ';' {printf("\nLectura");}
+                   | cond {printf("\nCondicion");}
+                   | repe 
                    ;
 asig:              ID '=' expr
+                   | ID OPERADOR2
                    ;
 expr:              val
                    | val OPERADOR expr
@@ -86,14 +91,37 @@ listExpr:          /*vacia*/
                    ;
 lect:              SCANF '(' CDC  ',' OPERADOR ID ')'
                    ;
-
+cond:              bloqueIF {printf("\nBloque IF");}
+                   | bloqueIF else {printf("\nBloque IF+ELSE");}
+                   ;
+bloqueIF:          IF '(' expr ')' '{' instrucciones '}' 
+                   ;
+else:              ELSE '{' instrucciones '}' 
+                   | ELSE cond 
+                   ;
+repe:              for {printf("\nRepeticion: bloque FOR");}
+                   | while {printf("\nRepeticion: bloque WHILE");}
+                   ;
+for:               FOR '(' inicia ';' expFOR ';' increm ')' '{' instrucciones '}'  
+                   ;
+inicia:            /*vacia*/ 
+                   | asig
+                   ;
+expFOR:            /*vacia*/ 
+                   | expr
+                   ;
+increm:            /*vacia*/
+                   | ID OPERADOR2
+                   ;
+while:             WHILE '(' expr ')' '{' instrucciones '}' 
+                   ;
 
 
 %%
 
 int main()
 {
-    yyin=fopen("ejemplo.c","r");
+    yyin=fopen("practica2.c","r");
     yyparse();
  
 }

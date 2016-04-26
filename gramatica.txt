@@ -1,3 +1,5 @@
+Tokens: define, id, CteInt, CteFloat, CteChar, int, float, char, =, main(), 
+
 PROGRAMA : DECL_CTES DECL_VBLS MAIN
 DECL_CTES : '' | DECL_CTE DECL_CTES
 DECL_CTE : #define id VALOR_CTE
@@ -23,3 +25,24 @@ CDC : %d | %c | %f
 DIRECC : '&' id
 COND : ''
 REPE : ''
+——————
+
+cond: bloqueIF | bloqueIF else
+bloqueIF: IF ‘(‘ expr ‘)’ ‘{‘ instruccs ‘}’
+else: ELSE ‘{‘ instruccs  ‘}’ | ELSE cold
+——
+
+La sentencia for tendrá la siguiente sintaxis
+
+for (inicialización;expresión;incremento)
+
+Donde la parte de inicialización tendrá la misma forma que una
+asignación, expresión será cualquier expresión válida en miniC e
+incremento será solamente el incremento o el decremento de una
+variable usando los operadores ++ o --. Cualquiera de estas partes
+podrá encontrarse vacía. Por ejemplo:
+
+for(i=0; i<10; i++)
+
+
+for: FOR ‘(‘ (asig|””) ‘;’ (expr|””) ‘;’ (id OPERADOR2|””) ‘)’ ‘{‘ instruccs ‘}’
