@@ -2,14 +2,11 @@
 #define NUMERO 15
 #define SALUDO "Hola"
 
-float c,d = 5.3 + 2.4;
-int a,b;
+float c = 5.3;
+int a;
+int b = 3;
 
 int main(){
-    int g;
-    h = a;
-    g = a+5;
-    z = 5 && f;
     printf("a a df",a,b,a+b);
     scanf("%d",&a);
     if(a==4){

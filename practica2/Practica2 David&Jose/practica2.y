@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "practica2.h"
 
 void yyerror(const char* msg) {
     fprintf(stderr, "%s\n", msg);
@@ -14,7 +15,14 @@ FILE *yyin;
 extern int nLineas;
 
 %}
-%token  ID
+
+%union {
+	   int tipo; // 1.int 2.float 3.char
+         int inic; // 0 no  1 si
+         struct simbolo *indice;
+	}
+
+%token <indice> ID
 %token  DEFINE
 %token  NUM_ENTERO
 %token  NUM_REAL
@@ -32,7 +40,8 @@ extern int nLineas;
 %token  SCANF
 %token  WHILE
 %token  CDC
-
+%type <tipo> expr val tipo
+%type <inic> id listID
 
 %%
 programa:	declaracionesCtes declaracionVbles main {printf("\n Todo correcto numero de lineas %d\n",nLineas);}
@@ -49,17 +58,24 @@ valor_cte:         NUM_ENTERO
 declaracionVbles:  /*vacia*/
                    | declaracionVble declaracionVbles
                    ;
-declaracionVble:   tipo listID ';' {printf("\nDeclaracion vble");}
+declaracionVble:   tipo listID ';' {printf("\nDeclaracion vble");
+						buscar_simbolo(--------);}
                    ;
-tipo:              INT
-                   | FLOAT
-                   | CHAR
+tipo:              INT     { $$ = 1; }
+                   | FLOAT { $$ = 2; }
+                   | CHAR  { $$ = 3; }
                    ;
-listID:            id
+listID:            id      { $$ = $1; }
                    | id ',' listID
                    ;
-id:                ID
-                   | asig
+id:                ID            { $$ = 0; }
+                   | ID '=' expr { $$ = 1; }
+                   ;
+expr:              val
+                   | val OPERADOR expr
+                   ;
+val:               ID
+                   | valor_cte
                    ;
 main:              MAIN '{' cuerpo '}'
                    ;
@@ -76,12 +92,6 @@ instruccion:       asig ';' {printf("\nAsignacion");}
                    ;
 asig:              ID '=' expr
                    | ID OPERADOR2
-                   ;
-expr:              val
-                   | val OPERADOR expr
-                   ;
-val:               ID
-                   | valor_cte
                    ;
 visu:              PRINTF '(' listExpr ')'
                    ;
@@ -126,4 +136,37 @@ int main()
  
 }
 
+yyerror(s)
+char *s;
+{
+  printf("%s\n",s);
+}
+struct simbolo *buscar_simbolo(struct simbolo simbo)
+{
+  int i;
+  if (num_sim == MAX_SIM)
+  {
+     yyerror("\nDemasiados simbolos");
+     exit(1);
+  }
+  else{
+  
+    for (i = 0; i<num_sim; i++)
+    {
+       if ((strcmp(simbo.id,tabla_simbolos[i].id) == 0)) 
+          {
+            /*strcmp devuelve 0 si son iguales */
+          return &tabla_simbolos[i];          
+        }
+    }
+    tabla_simbolos[num_sim].id = (char *) malloc (strlen(simbo.id)+1);
+    strcpy(tabla_simbolos[num_sim].id,simbo.id);
+    tabla_simbolos[num_sim].tipo = simbo.tipo;
+    /* tabla_simbolos[num_sim].id = strdup(s);*/
+    num_sim++;
+    return &tabla_simbolos[num_sim-1];
+   
+  }
+
+}
 

@@ -1,5 +1,6 @@
 %{
 #include "y.tab.h"
+#include "practica2.h" 
 #include <string.h>
   
 int nLineas=1;
@@ -80,6 +81,7 @@ coment ("//"{input}*{eol}?)
       }
 
 {iden}    { printf("\n %d ID",nLineas);
+            strcpy(yylval.indice.id, yytext);
             return ID;
           }
 
