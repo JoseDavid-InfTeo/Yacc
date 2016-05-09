@@ -12,14 +12,14 @@ void yyerror(const char* msg) {
 int yylex(void);
 FILE *yyin;
 
+int num_sim = 0;
 extern int nLineas;
 
 %}
 
 %union {
 	   int tipo; // 1.int 2.float 3.char
-         int inic; // 0 no  1 si
-         struct simbolo *indice;
+     struct simbolo *indice;
 	}
 
 %token <indice> ID
@@ -40,8 +40,8 @@ extern int nLineas;
 %token  SCANF
 %token  WHILE
 %token  CDC
-%type <tipo> expr val tipo
-%type <inic> id listID
+%type <tipo> tipo
+%type <indice> id
 
 %%
 programa:	declaracionesCtes declaracionVbles main {printf("\n Todo correcto numero de lineas %d\n",nLineas);}
@@ -58,18 +58,23 @@ valor_cte:         NUM_ENTERO
 declaracionVbles:  /*vacia*/
                    | declaracionVble declaracionVbles
                    ;
-declaracionVble:   tipo listID ';' {printf("\nDeclaracion vble");
-						buscar_simbolo(--------);}
+declaracionVble:   tipo id ';' {printf("\nDeclaracion vble");
+                                $2->tipo = $1;
+					                     	buscar_simbolo($2);}
                    ;
 tipo:              INT     { $$ = 1; }
                    | FLOAT { $$ = 2; }
                    | CHAR  { $$ = 3; }
                    ;
-listID:            id      { $$ = $1; }
+listID:            id      
                    | id ',' listID
                    ;
-id:                ID            { $$ = 0; }
-                   | ID '=' expr { $$ = 1; }
+id:                ID            { $$->inic = 0;  
+                                   strcpy($$->id, $1->id);
+                                 }
+                   | ID '=' expr { $$->inic = 1; 
+                                   strcpy($$->id, $1->id);
+                                 }
                    ;
 expr:              val
                    | val OPERADOR expr
@@ -136,11 +141,6 @@ int main()
  
 }
 
-yyerror(s)
-char *s;
-{
-  printf("%s\n",s);
-}
 struct simbolo *buscar_simbolo(struct simbolo simbo)
 {
   int i;
@@ -154,14 +154,16 @@ struct simbolo *buscar_simbolo(struct simbolo simbo)
     for (i = 0; i<num_sim; i++)
     {
        if ((strcmp(simbo.id,tabla_simbolos[i].id) == 0)) 
-          {
-            /*strcmp devuelve 0 si son iguales */
+       {
+          printf("\n Linea %d. ID ya declarado", nLineas);  
+
+          /*strcmp devuelve 0 si son iguales */
           return &tabla_simbolos[i];          
-        }
+       }
     }
-    tabla_simbolos[num_sim].id = (char *) malloc (strlen(simbo.id)+1);
-    strcpy(tabla_simbolos[num_sim].id,simbo.id);
-    tabla_simbolos[num_sim].tipo = simbo.tipo;
+    strcpy(tabla_simbolos[num_sim].id,simbo.id);  //copiamos nombre id
+    tabla_simbolos[num_sim].tipo = simbo.tipo;    //copiamos tipo id
+    tabla_simbolos[num_sim].inic = simbo.inic;    //copiamos inic del id
     /* tabla_simbolos[num_sim].id = strdup(s);*/
     num_sim++;
     return &tabla_simbolos[num_sim-1];

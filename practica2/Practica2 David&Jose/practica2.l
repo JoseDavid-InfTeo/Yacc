@@ -81,7 +81,7 @@ coment ("//"{input}*{eol}?)
       }
 
 {iden}    { printf("\n %d ID",nLineas);
-            strcpy(yylval.indice.id, yytext);
+            strcpy(yylval.indice->id, yytext);
             return ID;
           }
 

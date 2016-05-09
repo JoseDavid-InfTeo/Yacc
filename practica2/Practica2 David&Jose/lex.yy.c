@@ -509,10 +509,11 @@ char *yytext;
 #line 1 "practica2.l"
 #line 2 "practica2.l"
 #include "y.tab.h"
+#include "practica2.h" 
 #include <string.h>
   
 int nLineas=1;
-#line 516 "lex.yy.c"
+#line 517 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -694,10 +695,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 18 "practica2.l"
+#line 19 "practica2.l"
 
 
-#line 701 "lex.yy.c"
+#line 702 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -782,21 +783,21 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 20 "practica2.l"
+#line 21 "practica2.l"
 { printf("\n %d NUM_ENTERO",nLineas);
             return NUM_ENTERO;
 		      }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 24 "practica2.l"
+#line 25 "practica2.l"
 { printf("\n %d NUM_REAL",nLineas);
           return NUM_REAL;
         }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 28 "practica2.l"
+#line 29 "practica2.l"
 { printf("\n %d CDC",nLineas);
                   return CDC;
         }     
@@ -804,110 +805,111 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 32 "practica2.l"
+#line 33 "practica2.l"
 { printf("\n %d CADENA",nLineas);
             return CADENA;
           }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 36 "practica2.l"
+#line 37 "practica2.l"
 ;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 38 "practica2.l"
+#line 39 "practica2.l"
 { printf("\n %d DEFINE",nLineas);
             return DEFINE;
           }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 42 "practica2.l"
+#line 43 "practica2.l"
 { printf("\n %d INT",nLineas);
             return INT;
           }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 46 "practica2.l"
+#line 47 "practica2.l"
 { printf("\n %d FLOAT",nLineas);
             return FLOAT;
           }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 50 "practica2.l"
+#line 51 "practica2.l"
 { printf("\n %d CHAR",nLineas);
             return CHAR;
           }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 54 "practica2.l"
+#line 55 "practica2.l"
 { printf("\n %d MAIN",nLineas);
                   return MAIN;
                 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 58 "practica2.l"
+#line 59 "practica2.l"
 { printf("\n %d PRINTF",nLineas);
             return PRINTF;
           }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 62 "practica2.l"
+#line 63 "practica2.l"
 { printf("\n %d SCANF",nLineas);
           return SCANF;
         }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 66 "practica2.l"
+#line 67 "practica2.l"
 { printf("\n %d IF",nLineas);
         return IF;
       }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 70 "practica2.l"
+#line 71 "practica2.l"
 { printf("\n %d ELSE",nLineas);
           return ELSE;
         }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 74 "practica2.l"
+#line 75 "practica2.l"
 { printf("\n %d WHILE",nLineas);
           return WHILE;
         }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 78 "practica2.l"
+#line 79 "practica2.l"
 { printf("\n %d FOR",nLineas);
         return FOR;
       }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 82 "practica2.l"
+#line 83 "practica2.l"
 { printf("\n %d ID",nLineas);
+            strcpy(yylval.indice->id, yytext);
             return ID;
           }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 86 "practica2.l"
+#line 88 "practica2.l"
 { printf("\n %d OPERADOR",nLineas);
                                              return OPERADOR;
                                             }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 89 "practica2.l"
+#line 91 "practica2.l"
 { printf("\n %d OPERADOR2",nLineas);
             return OPERADOR2;
           }
@@ -915,7 +917,7 @@ YY_RULE_SETUP
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 92 "practica2.l"
+#line 94 "practica2.l"
 {  printf("\n %d COMENTARIO",nLineas);
 
          }
@@ -923,22 +925,22 @@ YY_RULE_SETUP
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 96 "practica2.l"
+#line 98 "practica2.l"
 { nLineas++; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 98 "practica2.l"
+#line 100 "practica2.l"
 { printf("\n %d %c",nLineas, yytext[0]);
     return yytext[0];
   }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 102 "practica2.l"
+#line 104 "practica2.l"
 ECHO;
 	YY_BREAK
-#line 942 "lex.yy.c"
+#line 944 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1935,7 +1937,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 102 "practica2.l"
+#line 104 "practica2.l"
 
 
 
