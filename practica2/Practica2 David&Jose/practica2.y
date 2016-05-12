@@ -4,7 +4,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "practica2.h"
 
 void yyerror(const char* msg) {
     fprintf(stderr, "%s\n", msg);
@@ -15,15 +14,26 @@ FILE *yyin;
 int num_sim = 0;
 extern int nLineas;
 
+struct simbolo{
+    char nombre[30];
+    int tipo;
+    int cte;
+    int inicializado;
+};
+struct simbolo tablaSimbolos[50];
+int dim = 0;
+
+int buscarSimbolo(struct simbolo tablaSimbolos[],char nombre[30],int dim);
+
 %}
 
 %union {
 	   int tipo; // 1.int 2.float 3.char
-     struct simbolo *indice;
+     char nombreId[30];
 	}
 
-%token <indice> ID
-%token  DEFINE
+%token <nombreId> ID
+%token            DEFINE
 %token  NUM_ENTERO
 %token  NUM_REAL
 %token  CADENA
@@ -40,27 +50,40 @@ extern int nLineas;
 %token  SCANF
 %token  WHILE
 %token  CDC
-%type <tipo> tipo
-%type <indice> id
+%type <tipo> tipo valor_cte
 
 %%
-programa:	declaracionesCtes declaracionVbles main {printf("\n Todo correcto numero de lineas %d\n",nLineas);}
+programa:	declaracionesCtes {printf("\n Todo correcto numero de lineas %d\n",nLineas);}
             ;
 declaracionesCtes: /*vacia*/
                    | declaracionCte declaracionesCtes
                    ;
-declaracionCte:    '#' DEFINE ID valor_cte {printf("\nDeclaracion cte");}
+declaracionCte:    '#' DEFINE ID valor_cte  { printf("\nDeclaracion cte");
+                                              int pos = buscarSimbolo(tablaSimbolos, $3, dim);
+                                              if (pos != dim){
+                                                  printf("\n ERROR lin: %d: identificador redeclarado\n",nLineas);
+                                              }
+                                              else {
+                                                  //lo añado
+                                                  printf("\n Añado %s",$3);
+                                                  tablaSimbolos[dim].tipo = $4;
+                                                  tablaSimbolos[dim].cte  = 1;
+                                                  tablaSimbolos[dim].inicializado = 1;
+                                                  strcpy(tablaSimbolos[dim].nombre,$3);
+                                                  dim++;
+                                              }
+                                            }
                    ;
-valor_cte:         NUM_ENTERO
-                   | NUM_REAL
-                   | CADENA
+valor_cte:         NUM_ENTERO { $$ = 1; }
+                   | NUM_REAL { $$ = 2; }
+                   | CADENA   { $$ = 3; }
                    ;
 declaracionVbles:  /*vacia*/
                    | declaracionVble declaracionVbles
                    ;
-declaracionVble:   tipo id ';' {printf("\nDeclaracion vble");
-                                $2->tipo = $1;
-					                     	buscar_simbolo($2);}
+declaracionVble:   tipo id ';'  { printf("\nDeclaracion vble");
+
+                                }
                    ;
 tipo:              INT     { $$ = 1; }
                    | FLOAT { $$ = 2; }
@@ -69,11 +92,11 @@ tipo:              INT     { $$ = 1; }
 listID:            id      
                    | id ',' listID
                    ;
-id:                ID            { $$->inic = 0;  
-                                   strcpy($$->id, $1->id);
+id:                ID            { 
+
                                  }
-                   | ID '=' expr { $$->inic = 1; 
-                                   strcpy($$->id, $1->id);
+                   | ID '=' expr {
+
                                  }
                    ;
 expr:              val
@@ -84,9 +107,11 @@ val:               ID
                    ;
 main:              MAIN '{' cuerpo '}'
                    ;
-cuerpo:            declaracionVbles instrucciones
+cuerpo:            /*vacía*/
+                   | declaracionVbles instrucciones
                    ;
-instrucciones:     instruccion
+instrucciones:     /*vacía*/
+                   | instruccion
                    | instruccion instrucciones
                    ;
 instruccion:       asig ';' {printf("\nAsignacion");}
@@ -141,34 +166,12 @@ int main()
  
 }
 
-struct simbolo *buscar_simbolo(struct simbolo simbo)
-{
-  int i;
-  if (num_sim == MAX_SIM)
-  {
-     yyerror("\nDemasiados simbolos");
-     exit(1);
-  }
-  else{
-  
-    for (i = 0; i<num_sim; i++)
-    {
-       if ((strcmp(simbo.id,tabla_simbolos[i].id) == 0)) 
-       {
-          printf("\n Linea %d. ID ya declarado", nLineas);  
-
-          /*strcmp devuelve 0 si son iguales */
-          return &tabla_simbolos[i];          
-       }
+int buscarSimbolo(struct simbolo tablaSimbolos[],char nombre[50],int dim){
+    for (int i=0;i<dim;i++){
+        if (strcmp(nombre,tablaSimbolos[i].nombre) == 0){
+            return i;
+        }
     }
-    strcpy(tabla_simbolos[num_sim].id,simbo.id);  //copiamos nombre id
-    tabla_simbolos[num_sim].tipo = simbo.tipo;    //copiamos tipo id
-    tabla_simbolos[num_sim].inic = simbo.inic;    //copiamos inic del id
-    /* tabla_simbolos[num_sim].id = strdup(s);*/
-    num_sim++;
-    return &tabla_simbolos[num_sim-1];
-   
-  }
-
+    return dim;
 }
 

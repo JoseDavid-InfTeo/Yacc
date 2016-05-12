@@ -84,10 +84,10 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 20 "practica2.y"
+#line 30 "practica2.y"
 {
 	   int tipo; // 1.int 2.float 3.char
-     struct simbolo *indice;
+     char nombreId[30];
 	}
 /* Line 1529 of yacc.c.  */
 #line 94 "y.tab.h"

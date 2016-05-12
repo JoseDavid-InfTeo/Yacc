@@ -896,7 +896,7 @@ case 17:
 YY_RULE_SETUP
 #line 83 "practica2.l"
 { printf("\n %d ID",nLineas);
-            strcpy(yylval.indice->id, yytext);
+            strcpy(yylval.nombreId, yytext);
             return ID;
           }
 	YY_BREAK
